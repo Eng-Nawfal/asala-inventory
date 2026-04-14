@@ -18,22 +18,30 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: 'temurin'
           java-version: '17'
 
       - name: Install Dependencies
         run: |
+          pip install --upgrade pip
           pip install flet[all]
-          # في حال وجود ملف requirements.txt
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          # إنشاء ملف requirements إذا لم يكن موجوداً لتجنب الخطأ
+          if [ ! -f requirements.txt ]; then echo "flet" > requirements.txt; fi
+          pip install -r requirements.txt
+
+      - name: Initialize Flet App
+        run: |
+          # هذه الخطوة تنشئ ملفات التعريف الضرورية للأندرويد تلقائياً
+          flet create . --description "Al-Asala Engineering Office Management System"
 
       - name: Build APK
         run: |
-          # إضافة --no-version-check لتجنب توقف البناء بسبب تحديثات فليت المفاجئة
-          flet build apk --verbose
+          # استخدام --verbose لإظهار التفاصيل الدقيقة في حال الفشل
+          # استخدام --no-version-check لتفادي توقف البناء بسبب تحديثات المكتبة
+          flet build apk --verbose --no-version-check
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Asala-App-Final
+          name: Asala-App-Official
           path: build/apk/*.apk
