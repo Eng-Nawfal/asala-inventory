@@ -1,4 +1,11 @@
 import flet as ft
+import traceback
+
+def main(page: ft.Page):
+    try:
+
+
+import flet as ft
 import sqlite3
 import os
 
@@ -157,5 +164,16 @@ def main(page: ft.Page):
     nav = ft.Container(content=ft.Row([ft.ElevatedButton("الاستعلام والجرد", on_click=show_inventory_selection), ft.ElevatedButton("إضافة مادة", on_click=show_add_page), ft.ElevatedButton("الأقسام", on_click=show_manage_cats)], alignment="spaceAround"), bgcolor="#1565C0", padding=10)
     page.add(header, nav, ft.Container(content=content_area, padding=20, expand=True))
     show_inventory_selection()
+
+ft.app(target=main)
+page.add(ft.Text("تم تشغيل نظام مكتب الأصالة بنجاح!"))
+        # --------------------------------
+    except Exception as e:
+        # في حال حدوث أي خطأ، سيظهر لك النص الأحمر بدلاً من الشاشة البيضاء
+        error_details = traceback.format_exc()
+        page.add(ft.Column([
+            ft.Text("حدث خطأ أثناء التشغيل:", size=20, color="red"),
+            ft.Text(error_details, color="orange", selectable=True)
+        ], scroll=True))
 
 ft.app(target=main)
