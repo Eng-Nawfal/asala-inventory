@@ -21,27 +21,20 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install Dependencies
+      - name: Install Flet
         run: |
           pip install --upgrade pip
           pip install flet[all]
-          # إنشاء ملف requirements إذا لم يكن موجوداً لتجنب الخطأ
-          if [ ! -f requirements.txt ]; then echo "flet" > requirements.txt; fi
-          pip install -r requirements.txt
-
-      - name: Initialize Flet App
-        run: |
-          # هذه الخطوة تنشئ ملفات التعريف الضرورية للأندرويد تلقائياً
-          flet create . --description "Al-Asala Engineering Office Management System"
 
       - name: Build APK
         run: |
-          # استخدام --verbose لإظهار التفاصيل الدقيقة في حال الفشل
-          # استخدام --no-version-check لتفادي توقف البناء بسبب تحديثات المكتبة
-          flet build apk --verbose --no-version-check
+          # سنستخدم أمر البناء المباشر مع تحديد ملف المدخل
+          # تأكد أن ملفك اسمه main.py وموجود في المجلد الرئيسي للمستودع
+          flet build apk --main main.py --verbose
 
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: Asala-App-Official
+          name: Asala-App-V1
           path: build/apk/*.apk
