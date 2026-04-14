@@ -26,11 +26,14 @@ jobs:
           pip install --upgrade pip
           pip install flet[all]
 
-      - name: Build APK
+      - name: Initialize and Build
         run: |
-          # سنستخدم أمر البناء المباشر مع تحديد ملف المدخل
-          # تأكد أن ملفك اسمه main.py وموجود في المجلد الرئيسي للمستودع
-          flet build apk --main main.py --verbose
+          # مسح أي إعدادات قديمة وإنشاء ملف تعريف جديد للمشروع
+          rm -rf .flet
+          flet create . --description "Al-Asala Engineering System"
+          
+          # البناء بدون الأوسمة التي تسبب تضارباً
+          flet build apk --verbose
 
       - name: Upload APK
         if: success()
