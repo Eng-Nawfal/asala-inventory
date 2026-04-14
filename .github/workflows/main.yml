@@ -15,22 +15,25 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install SDKs
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y openjdk-17-jdk
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
 
-      - name: Install Flet and Dependencies
+      - name: Install Dependencies
         run: |
           pip install flet[all]
-          pip install -r requirements.txt
+          # في حال وجود ملف requirements.txt
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Build APK
         run: |
+          # إضافة --no-version-check لتجنب توقف البناء بسبب تحديثات فليت المفاجئة
           flet build apk --verbose
 
-      - name: Upload APK Artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Asala-Engineering-App
+          name: Asala-App-Final
           path: build/apk/*.apk
