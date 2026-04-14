@@ -29,7 +29,7 @@ jobs:
       - name: Build APK (Auto-Confirm)
         run: |
           # سنستخدم أمر "yes" لإرسال حرف "y" تلقائياً لأي سؤال يطرحه محرك البناء
-          yes y | flet build apk --verbose
+         yes y | flet build apk --permissions INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE --verbose
 
       - name: Upload APK
         if: success()
