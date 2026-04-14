@@ -26,14 +26,10 @@ jobs:
           pip install --upgrade pip
           pip install flet[all]
 
-      - name: Initialize and Build
+      - name: Build APK (Auto-Confirm)
         run: |
-          # مسح أي إعدادات قديمة وإنشاء ملف تعريف جديد للمشروع
-          rm -rf .flet
-          flet create . --description "Al-Asala Engineering System"
-          
-          # البناء بدون الأوسمة التي تسبب تضارباً
-          flet build apk --verbose
+          # سنستخدم أمر "yes" لإرسال حرف "y" تلقائياً لأي سؤال يطرحه محرك البناء
+          yes y | flet build apk --verbose
 
       - name: Upload APK
         if: success()
